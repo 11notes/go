@@ -1,2 +1,2 @@
-module github.com/11notes/dgo/util
+module github.com/11notes/go/util
 go 1.25.0
