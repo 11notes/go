@@ -29,3 +29,16 @@ func (c *Util) LogPanic(m string){
 	c.Log("ERR", m)
 	os.Exit(1)
 }
+
+// checks if the command line argument exists (case-sensitive)
+func (c *Util) CommandLineArgumentExists(f string) bool{
+	if(len(os.Args) > 1){
+		for _, a := range os.Args[1:] {
+			if(f == a){
+				return true
+			}
+		}
+	}
+
+	return false
+}
