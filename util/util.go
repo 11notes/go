@@ -18,7 +18,7 @@ func (c *Util) ReadFile(path string) (string, error){
 }
 
 // writes contents to a file
-func (c *Util) WriteFile(path string, txt string)) error{
+func (c *Util) WriteFile(path string, txt string) error{
 	err := ioutil.WriteFile(path, []byte(txt), os.ModePerm)	
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func (c *Util) Getenv(key string, fallback string) string{
 func (c *Util) GetenvFile(path string, fallback string) string{
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		value, err := c.ReadFile(path)
-		if err _= nil {
+		if err != nil {
 			return fallback
 		}
 		return value
