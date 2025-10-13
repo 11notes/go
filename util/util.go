@@ -8,8 +8,10 @@ import (
 	"os"
 )
 
+type Util struct{}
+
 // output log in json format with time stamp and simple string message
-func Log(t string, m string){
+func (c *Util) log(t string, m string){
 	l := "INF"
 	switch {
 		case regexp.MustCompile(`(?i)DEBUG|DBG|DEB`).MatchString(t): l = "DBG"
