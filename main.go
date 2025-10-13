@@ -14,7 +14,7 @@ type New struct{
 }
 
 // output log in json format with time stamp and simple string message
-func (c *New) Log(t string, m string){
+func (c *New) Log(t string, m string, args ...interface{}){
 	l := "INF"
 	p := true
 	switch {
@@ -31,6 +31,12 @@ func (c *New) Log(t string, m string){
 		}
 	}
 	if(p){
-		fmt.Printf(`{"time":"%s","type":"%s","msg":"%s"}` + "\n", time.Now().Format("2006-01-02T15:04:05.000Z"), l, m)
+		fmt.Println(fmt.Sprintf(`{"time":"%s","type":"%s","msg":"%s"}`, time.Now().Format("2006-01-02T15:04:05.000Z"), l, fmt.Sprintf(m, args...)))
 	}
+}
+
+// output log in json format with time stamp and simple string message and exist process with exit code 1
+func (c *New) LogFatal(m string, args ...interface{}){
+	c.Log("ERR", m, args...)
+	os.Exit(1)
 }
