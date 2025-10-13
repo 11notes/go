@@ -3,9 +3,28 @@ package util
 
 import (
 	"os"
+	"io/ioutil"
 )
 
 type Util struct{}
+
+// reads a file if it exists and returns the content of the file
+func (c *Util) ReadFile(path string) (string, error){
+	bytes, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
+
+// writes contents to a file
+func (c *Util) WriteFile(path string, txt string)) error{
+	err := ioutil.WriteFile(path, []byte(txt), os.ModePerm)	
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 // checks if the command line argument exists (case-sensitive)
 func (c *Util) CommandLineArgumentExists(f string) bool{
@@ -23,6 +42,18 @@ func (c *Util) CommandLineArgumentExists(f string) bool{
 // checks if an environment variable exists and if not assigns a default value
 func (c *Util) Getenv(key string, fallback string) string{
 	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
+// checks if a file containing an environment variable exists and if not assigns a default value
+func (c *Util) GetenvFile(path string, fallback string) string{
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		value, err := c.ReadFile(path)
+		if err _= nil {
+			return fallback
+		}
 		return value
 	}
 	return fallback
