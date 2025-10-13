@@ -23,3 +23,9 @@ func (c *Util) Log(t string, m string){
 	}
 	fmt.Printf(`{"time":"%s","type":"%s","msg":"%s"}` + "\n", time.Now().Format("2006-01-02T15:04:05.000Z"), l, m)
 }
+
+// output log in json format with time stamp and simple string message and exit process
+func (c *Util) LogPanic(m string){
+	c.Log("ERR", m)
+	os.Exit(1)
+}
