@@ -2,33 +2,10 @@
 package util
 
 import (
-	"fmt"
-	"time"
-	"regexp"
 	"os"
 )
 
 type Util struct{}
-
-// output log in json format with time stamp and simple string message
-func (c *Util) Log(t string, m string){
-	l := "INF"
-	switch {
-		case regexp.MustCompile(`(?i)DEBUG|DBG|DEB`).MatchString(t): l = "DBG"
-		case regexp.MustCompile(`(?i)INFO|INF|IN`).MatchString(t): l = "INF"
-		case regexp.MustCompile(`(?i)WARNING|WARN|WRN`).MatchString(t): l = "WRN"
-		case regexp.MustCompile(`(?i)ERROR|ERR`).MatchString(t): l = "ERR"
-		case regexp.MustCompile(`(?i)START`).MatchString(t): m = fmt.Sprintf("starting %s v%s", os.Getenv("APP_NAME"), os.Getenv("APP_VERSION"))
-		case regexp.MustCompile(`(?i)PATCH|FIX`).MatchString(t): l = "FIX"
-	}
-	fmt.Printf(`{"time":"%s","type":"%s","msg":"%s"}` + "\n", time.Now().Format("2006-01-02T15:04:05.000Z"), l, m)
-}
-
-// output log in json format with time stamp and simple string message and exit process
-func (c *Util) LogPanic(m string){
-	c.Log("ERR", m)
-	os.Exit(1)
-}
 
 // checks if the command line argument exists (case-sensitive)
 func (c *Util) CommandLineArgumentExists(f string) bool{
@@ -41,4 +18,12 @@ func (c *Util) CommandLineArgumentExists(f string) bool{
 	}
 
 	return false
+}
+
+// checks if an environment variable exists and if not assigns a default value
+func (c *Util) Getenv(key string, fallback string) string{
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
