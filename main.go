@@ -5,5 +5,5 @@ import (
 )
 
 type Eleven struct{
-	util Util
+	util eleven.Util
 }
