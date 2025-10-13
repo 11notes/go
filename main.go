@@ -4,6 +4,6 @@ import (
 	"github.com/11notes/go/util"
 )
 
-type Eleven struct{
-	util eleven.Util
+type New struct{
+	util util.Util
 }

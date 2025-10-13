@@ -1,5 +1,5 @@
 // analog to docker-util for shell and javascript in go
-package eleven
+package util
 
 import (
 	"fmt"
