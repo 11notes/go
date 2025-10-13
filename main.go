@@ -5,5 +5,5 @@ import (
 )
 
 type New struct{
-	util util.Util
+	Util util.Util
 }
