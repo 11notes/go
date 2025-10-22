@@ -3,6 +3,7 @@ package util
 
 import (
 	"os"
+	"os/exec"
 	"io/ioutil"
 )
 
@@ -57,4 +58,11 @@ func (c *Util) GetenvFile(path string, fallback string) string{
 		return value
 	}
 	return fallback
+}
+
+// run an external program and return output
+func (c *Util) Run(bin string, params []string) (string, error){
+	cmd := exec.Command(bin, params...)
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid:true}
+	return cmd.Output()
 }
