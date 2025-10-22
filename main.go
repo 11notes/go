@@ -7,10 +7,12 @@ import (
 	"os"
 
 	"github.com/11notes/go/util"
+	"github.com/11notes/go/container"
 )
 
 type New struct{
 	Util util.Util
+	Container container.Container
 }
 
 // output log in json format with time stamp and simple string message

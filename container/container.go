@@ -1,0 +1,27 @@
+// analog to docker-util for shell and javascript in go
+package container
+
+import (
+	"errors"
+	"os"
+	"io/ioutil"
+)
+
+type Container struct{}
+
+// tries to get a secret either from environment variable or from a secrets file set by environment variable
+func (c *Util) GetSecret(env string, envPath string) (string, error){
+	if value, ok := os.LookupEnv(env); ok {
+		return value, nil
+	}else{
+		if value, ok := os.LookupEnv(envPath); ok {
+			bytes, err := ioutil.ReadFile(value)
+			if err != nil {
+				return "", err
+			}
+			return string(bytes), nil
+		}else{
+			return "", errors.New(env + " and " + envPath + " do not exist!")
+		}
+	}
+}
