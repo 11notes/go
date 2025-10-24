@@ -6,8 +6,6 @@ import (
 	"os/exec"
 	"syscall"
 	"io/ioutil"
-	"errors"
-	"strings"
 )
 
 type Util struct{}
@@ -68,5 +66,5 @@ func (c *Util) Run(bin string, params []string) (string, error){
 	cmd := exec.Command(bin, params...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid:true}
 	out, err := cmd.Output()
-	return string(out), errors.New(err.Error() + " for binary " + bin + " with arguments " + strings.Join(params, " "))
+	return string(out), err
 }
