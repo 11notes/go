@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"io/ioutil"
+	"strings"
 )
 
 type Container struct{}
@@ -19,7 +20,7 @@ func (c *Container) GetSecret(env string, envPath string) (string, error){
 			if err != nil {
 				return "", err
 			}
-			return string(bytes), nil
+			return strings.TrimSpace(string(bytes)), nil
 		}else{
 			return "", errors.New(env + " and " + envPath + " do not exist!")
 		}
