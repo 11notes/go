@@ -6,6 +6,10 @@ import (
 	"os/exec"
 	"syscall"
 	"io/ioutil"
+	"strings"
+	"bufio"
+	"io"
+	"errors"
 )
 
 type Util struct{}
@@ -65,6 +69,25 @@ func (c *Util) GetenvFile(path string, fallback string) string{
 func (c *Util) Run(bin string, params []string) (string, error){
 	cmd := exec.Command(bin, params...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid:true}
-	out, err := cmd.Output()
-	return string(out), err
+
+	stdout, _ := cmd.StdoutPipe()
+	stderr, _ := cmd.StderrPipe()
+	out := []string{}
+	go func() {
+		stdoutScanner := bufio.NewScanner(io.MultiReader(stdout,stderr))
+		for stdoutScanner.Scan() {
+			out = append(out, stdoutScanner.Text())
+		}
+	}()
+
+	err := cmd.Start()
+	if err != nil {
+		return "", errors.New(err.Error() + strings.Join(out, " "))
+	}
+	err = cmd.Wait()
+	if err != nil {
+		return "", errors.New(err.Error() + strings.Join(out, " "))
+	}
+
+	return strings.Join(out, " "), nil
 }
