@@ -30,7 +30,10 @@ func (c *Container) GetSecret(env string, envPath string) (string, error){
 // merges default parameters and user set parameters
 func (c *Container) Command(d []string) []string{
 	if(len(os.Args) > 0){
-		d = append(d, os.Args[1:])
+		args := os.Args[1:]
+		for _, value := range args{
+			d = append(d, value)
+		}
 	}
 	return(d)
 }
