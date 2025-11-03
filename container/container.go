@@ -6,6 +6,9 @@ import (
 	"os"
 	"io/ioutil"
 	"strings"
+	"regexp"
+
+	"github.com/11notes/go/util"
 )
 
 type Container struct{}
@@ -36,4 +39,32 @@ func (c *Container) Command(d []string) []string{
 		}
 	}
 	return(d)
+}
+
+// replaces variables inside a file
+func (c *Container) FileContentReplace(file string, rep map[string]interface{}) error{
+	// open file
+	text, err := util.Util.ReadFile(file)
+	if err != nil {
+		return err
+	}
+
+	// replace all variables
+	for key, value := range rep{
+		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, key)).ReplaceAllString(text, value))
+	}
+
+	// replace all not set variablse with empty string
+	empty := regexp.MustCompile(`\$\{[A-Z_a-z]+\}`).FindAllString(text, -1)
+	for _, e := range empty {
+		text = string(regexp.MustCompile(fmt.Sprintf(`%s`, e)).ReplaceAllString(text, ""))
+	}
+
+	// write file
+	err := util.Util.WriteFile(file, text)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

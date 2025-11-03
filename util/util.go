@@ -25,7 +25,7 @@ func (c *Util) ReadFile(path string) (string, error){
 
 // writes contents to a file
 func (c *Util) WriteFile(path string, txt string) error{
-	err := ioutil.WriteFile(path, []byte(txt), os.ModePerm)	
+	err := ioutil.WriteFile(path, []byte(txt), os.ModePerm)
 	if err != nil {
 		return err
 	}
