@@ -55,7 +55,7 @@ func (c *Container) FileContentReplace(file string, r map[string]interface{}) er
 
 	// replace all variables
 	for key, value := range r{
-		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, string(key))).ReplaceAllString(text, string(value)))
+		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, key)).ReplaceAllString(text, fmt.Sprintf("%s", value)))
 	}
 
 	// replace all not set variablse with empty string
