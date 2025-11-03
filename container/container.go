@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"regexp"
+	"fmt"
 
 	"github.com/11notes/go/util"
 )
@@ -42,15 +43,15 @@ func (c *Container) Command(d []string) []string{
 }
 
 // replaces variables inside a file
-func (c *Container) FileContentReplace(file string, rep map[string]interface{}) error{
+func (c *Container) FileContentReplace(file string, r map[string]interface{}) error{
 	// open file
-	text, err := util.Util.ReadFile(file)
+	text, err := (*util.Util).ReadFile(file)
 	if err != nil {
 		return err
 	}
 
 	// replace all variables
-	for key, value := range rep{
+	for key, value := range r{
 		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, key)).ReplaceAllString(text, value))
 	}
 
@@ -61,7 +62,7 @@ func (c *Container) FileContentReplace(file string, rep map[string]interface{}) 
 	}
 
 	// write file
-	err := util.Util.WriteFile(file, text)
+	err = (*util.Util).WriteFile(file, text)
 	if err != nil {
 		return err
 	}
