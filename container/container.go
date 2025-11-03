@@ -13,6 +13,9 @@ import (
 )
 
 type Container struct{}
+var(
+	_util util.Util = util.Util{}
+)
 
 // tries to get a secret either from environment variable or from a secrets file set by environment variable
 func (c *Container) GetSecret(env string, envPath string) (string, error){
@@ -45,14 +48,14 @@ func (c *Container) Command(d []string) []string{
 // replaces variables inside a file
 func (c *Container) FileContentReplace(file string, r map[string]interface{}) error{
 	// open file
-	text, err := (*util.Util).ReadFile(file)
+	text, err := _util.ReadFile(file)
 	if err != nil {
 		return err
 	}
 
 	// replace all variables
 	for key, value := range r{
-		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, key)).ReplaceAllString(text, value))
+		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, string(key))).ReplaceAllString(text, string(value)))
 	}
 
 	// replace all not set variablse with empty string
@@ -62,7 +65,7 @@ func (c *Container) FileContentReplace(file string, r map[string]interface{}) er
 	}
 
 	// write file
-	err = (*util.Util).WriteFile(file, text)
+	err = _util.WriteFile(file, text)
 	if err != nil {
 		return err
 	}
