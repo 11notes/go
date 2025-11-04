@@ -8,11 +8,13 @@ import (
 
 	"github.com/11notes/go/util"
 	"github.com/11notes/go/container"
+	"github.com/11notes/go/http"
 )
 
 type New struct{
 	Util util.Util
 	Container container.Container
+	HTTP http.HTTP
 }
 
 // output log in json format with time stamp and simple string message
