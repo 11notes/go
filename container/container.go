@@ -72,3 +72,12 @@ func (c *Container) FileContentReplace(file string, r map[string]interface{}) er
 
 	return nil
 }
+
+// converts contents of an environment variable to a file
+func (c *Container) EnvToFile(env string, path string) error{
+	if value, ok := os.LookupEnv(env); ok {
+		return _util.WriteFile(path, value)
+	}else{
+		return errors.New(env + " do not exist!")
+	}
+}
