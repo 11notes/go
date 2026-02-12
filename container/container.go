@@ -14,7 +14,7 @@ import (
 
 type Container struct{}
 var(
-	_util util.Util = util.Util{}
+	_util = util.Util{}
 )
 
 // tries to get a secret either from environment variable or from a secrets file set by environment variable
@@ -58,7 +58,7 @@ func (c *Container) FileContentReplace(file string, r map[string]interface{}) er
 		text = string(regexp.MustCompile(fmt.Sprintf(`\${%s}`, key)).ReplaceAllString(text, fmt.Sprintf("%s", value)))
 	}
 
-	// replace all not set variablse with empty string
+	// replace all not set variables with an empty string
 	empty := regexp.MustCompile(`\$\{[A-Z_a-z]+\}`).FindAllString(text, -1)
 	for _, e := range empty {
 		text = string(regexp.MustCompile(fmt.Sprintf(`%s`, e)).ReplaceAllString(text, ""))
@@ -73,11 +73,23 @@ func (c *Container) FileContentReplace(file string, r map[string]interface{}) er
 	return nil
 }
 
-// converts contents of an environment variable to a file
+// replaces all environment variables inside a file
+func (c *Container) EnvSubst(file string) error{
+	env := map[string]any{}
+	for _, e := range os.Environ() {
+		key := strings.Split(e, "=")[0]
+		value := os.Getenv(key)
+		env[key] = value
+	}
+
+	return c.FileContentReplace(file, env)
+}
+
+// converts an environment variable to a file
 func (c *Container) EnvToFile(env string, path string) error{
 	if value, ok := os.LookupEnv(env); ok {
 		return _util.WriteFile(path, value)
 	}else{
-		return errors.New(env + " do not exist!")
+		return errors.New(env + " does not exist!")
 	}
 }
