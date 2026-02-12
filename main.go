@@ -6,19 +6,19 @@ import (
 	"regexp"
 	"os"
 
-	"github.com/11notes/go/util"
-	"github.com/11notes/go/container"
-	"github.com/11notes/go/http"
+	"github.com/11notes/go/container/v2"
+	"github.com/11notes/go/http/v2"
+	"github.com/11notes/go/util/v2"
 )
 
-type New struct{
-	Util util.Util
-	Container container.Container
-	HTTP http.HTTP
-}
+var(
+	Container = &container.Container{}
+	HTTP = &http.HTTP{}
+	Util = &util.Util{}
+)
 
-// output log in json format with time stamp and simple string message
-func (c *New) Log(t string, m string, args ...interface{}){
+// output log in json format with time current stamp and simple string message
+func Log(t string, m string, args ...interface{}){
 	l := "INF"
 	p := true
 	switch {
@@ -39,8 +39,8 @@ func (c *New) Log(t string, m string, args ...interface{}){
 	}
 }
 
-// output log in json format with time stamp and simple string message and exist process with exit code 1
-func (c *New) LogFatal(m string, args ...interface{}){
-	c.Log("ERR", m, args...)
+// output log in json format with time current stamp and simple string message and exit process with exit code 1 error
+func LogFatal(m string, args ...interface{}){
+	Log("ERR", m, args...)
 	os.Exit(1)
 }
