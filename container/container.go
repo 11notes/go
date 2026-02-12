@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"fmt"
 
-	"github.com/11notes/go/util"
+	"github.com/11notes/go/util/v2"
 )
 
 type Container struct{}
